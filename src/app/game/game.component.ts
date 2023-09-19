@@ -5,6 +5,12 @@ import { Component } from '@angular/core';
   templateUrl: './game.component.html',
   styleUrls: ['./game.component.scss']
 })
-export class GameComponent {
 
+export class GameComponent {
+  pickCardAnimation = false;
+
+  takeCard() {
+    this.pickCardAnimation = true;
+  }
 }
+
