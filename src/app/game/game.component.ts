@@ -18,21 +18,22 @@ export class GameComponent {
 
   newGame() {
     this.game = new Game();
-    console.log(this.game);
   }
 
   takeCard() {
     if (!this.pickCardAnimation) {
       this.currentCard = this.game.stack.pop();
-      console.log(this.currentCard);
       this.pickCardAnimation = true;
 
       setTimeout(() => {
+        this.game.playedCards.push(this.currentCard);
         this.pickCardAnimation = false;
-      }, 1500)
+      }, 1000)
     }
   }
 }
+
+
 
 
 
