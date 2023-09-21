@@ -1,3 +1,6 @@
+<app-player *ngFor="let player of game.players; let i = index" [ngStyle]="{'top.px': 100 + (i * 120)}" [name]="player"
+    style="top: 100px" class="player-position"></app-player>
+
 <div class="field">
     <div class="card-stack">
         <!-- Card stack -->
@@ -10,6 +13,13 @@
         <img (click)="takeCard()" *ngIf="pickCardAnimation" class="pick-card" style="right: 25px"
             src="/assets/img/cards/{{ currentCard }}.png">
     </div>
-    <div class="imprint"><a href="https://www.flaticon.com/free-icons/user" title="user icons">User icons created by Freepik -
-            Flaticon</a></div>
+    <div class="imprint">
+        <a href="https://www.flaticon.com/free-icons/create-profile" title="create profile icons">Create profile icons
+            created by Anggara - Flaticon</a>
+    </div>
 </div>
+
+<button mat-fab color="primary" (click)="openDialog()" class="btn-add">
+    <mat-icon>add</mat-icon>
+</button>
+
