@@ -4,13 +4,13 @@ import { MatDialog } from '@angular/material/dialog';
 import { DialogAddPlayerComponent } from '../dialog-add-player/dialog-add-player.component';
 import {
   Firestore,
-  collectionData,
   collection,
   addDoc,
+  doc,
+  docData,
 } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
-import { doc } from 'rxfire/firestore';
 
 @Component({
   selector: 'app-game',
@@ -21,8 +21,7 @@ export class GameComponent {
   pickCardAnimation = false;
   currentCard: string = '';
   game: Game;
-  item$: any;
-  items: any;
+  gameId: string;
 
   firestore: Firestore = inject(Firestore);
 
@@ -31,10 +30,14 @@ export class GameComponent {
   ngOnInit(): void {
     this.newGame();
     this.route.params.subscribe((params) => {
-      console.log(params.id);
-      this.item$ = collectionData(collection(this.firestore, 'games'));
-      this.items = this.item$.subscribe((game) => {
+      this.gameId = params.id;
+      const getData = doc(this.getGameRef(), this.gameId);
+      docData(getData).subscribe((game: any) => {
         console.log(game);
+        this.game.currentPlayer = game.currentPlayer;
+        this.game.playedCards = game.playedCards;
+        this.game.players = game.players;
+        this.game.stack = game.stack;
       });
     });
   }
@@ -43,8 +46,6 @@ export class GameComponent {
     this.game = new Game();
     // this.addGame();
   }
-
- 
 
   async addGame() {
     await addDoc(this.getGameRef(), this.game.toJSON()).catch((err) => {
