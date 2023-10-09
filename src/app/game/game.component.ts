@@ -8,6 +8,7 @@ import {
   addDoc,
   doc,
   docData,
+  updateDoc,
 } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
@@ -33,7 +34,7 @@ export class GameComponent {
       this.gameId = params.id;
       const getData = doc(this.getGameRef(), this.gameId);
       docData(getData).subscribe((game: any) => {
-        console.log(game);
+        // console.log(game);
         this.game.currentPlayer = game.currentPlayer;
         this.game.playedCards = game.playedCards;
         this.game.players = game.players;
@@ -44,17 +45,6 @@ export class GameComponent {
 
   newGame() {
     this.game = new Game();
-    // this.addGame();
-  }
-
-  async addGame() {
-    await addDoc(this.getGameRef(), this.game.toJSON()).catch((err) => {
-      console.log(err);
-    });
-  }
-
-  getGameRef() {
-    return collection(this.firestore, 'games');
   }
 
   takeCard() {
@@ -63,14 +53,14 @@ export class GameComponent {
       this.pickCardAnimation = true;
       console.log('New card ' + this.currentCard);
       console.log('Game is', this.game);
-
+      this.saveGame();
       this.game.currentPlayer++;
       this.game.currentPlayer =
-        this.game.currentPlayer % this.game.players.length; // Modulo Operator
-
+      this.game.currentPlayer % this.game.players.length; // Modulo Operator
       setTimeout(() => {
         this.game.playedCards.push(this.currentCard);
         this.pickCardAnimation = false;
+        this.saveGame();
       }, 1000);
     }
   }
@@ -81,7 +71,19 @@ export class GameComponent {
     dialogRef.afterClosed().subscribe((name: string) => {
       if (name && name.length > 0) {
         this.game.players.push(name);
+        this.saveGame();
       }
     });
+  }
+
+  saveGame() {
+    const updateData = doc(this.getGameRef(), this.gameId);
+    console.log(this.gameId);
+
+    updateDoc(updateData, this.game.toJSON());
+  }
+
+  getGameRef() {
+    return collection(this.firestore, 'games');
   }
 }
