@@ -94,7 +94,27 @@
   }
 }
 
-.imprint {
-  position: absolute;
-  bottom: 8px;
+app-player,
+app-player-mobile {
+  cursor: pointer;
+
+  &:hover {
+    filter: brightness(1.15);
+  }
+}
+
+.game-over {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  
+  img {
+    width: 100%;
+  }
+}
+
+.preload-image {
+  opacity: 0;
+  z-index: -999;
 }
